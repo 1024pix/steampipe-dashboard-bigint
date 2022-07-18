@@ -161,37 +161,58 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_in_maintenance
-      args = ["Pix App", "pix-app-production"]
+      args = {
+        "app_label": "Pix App",
+        "app_name": "pix-app-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_in_maintenance
-      args = ["Pix Certif", "pix-certif-production"]
+      args = {
+        "app_label": "Pix Certif",
+        "app_name": "pix-certif-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_in_maintenance
-      args = ["Pix Orga", "pix-orga-production"]
+      args = {
+        "app_label": "Pix Orga",
+        "app_name": "pix-orga-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_down
-      args = ["Pix API", "pix-api-production"]
+      args = {
+        "app_label": "Pix API",
+        "app_name": "pix-api-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_down
-      args = ["Metabase", "pix-metabase-production"]
+      args = {
+        "app_label": "Metabase",
+        "app_name": "pix-metabase-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_down
-      args = ["Datawarehouse-production", "pix-datawarehouse-production"]
+      args = {
+        "app_label": "datawarehouse",
+        "app_name": "pix-datawarehouse-production"
+      }
       width = 2
     }
     card {
       query = query.is_app_down
-      args = ["Datawarehouse-ex-production", "pix-datawarehouse-ex-production"]
+      args = {
+        "app_label": "datawarehouse-ex",
+        "app_name": "pix-datawarehouse-ex-production"
+      }
       width = 2
     }
     card {

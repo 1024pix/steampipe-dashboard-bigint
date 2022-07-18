@@ -176,7 +176,7 @@ dashboard "dashboard_bigint" {
     }
     chart {
       type = "line"
-      title = "Nombre de connexion a la BDD"
+      title = "Nombre de connexions a la BDD"
       axes {
         x {
           title {
@@ -188,7 +188,7 @@ dashboard "dashboard_bigint" {
         }
         y {
           title {
-            value  = "Nombre de connexion"
+            value  = "Nombre de connexions"
           }
           labels {
             display = "show"

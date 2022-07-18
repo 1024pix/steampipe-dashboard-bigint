@@ -11,5 +11,8 @@ mod "bigint" {
     plugin "net" {
       version = "0.6.0"
     }
+    plugin "ghcr.io/francois2metz/freshping" {
+      version = "0.0.1"
+    }
   }
 }

@@ -4,8 +4,11 @@
 
 Prérequis:
 - Steampipe
-- Plugin scalingo
-- Plugin datadog
+- Pugins:
+  - francois2metz/scalingo
+  - datadog
+  - net
+  - ghcr.io/francois2metz/freshping
 
 ## Usage
 

@@ -1,3 +1,22 @@
+query "freshping_paused" {
+  description = "All freshpings checks are paused"
+  sql         = <<-EOQ
+    select
+      'Freshping monitoring' as label,
+      case
+        when count(*) = 0 then 'Paused'
+        else 'Not paused'
+      end as value,
+      case
+        when count(*) = 0 then 'ok'
+        else 'alert'
+      end as type
+    from
+      freshping_check
+    where
+      status != 'PS'
+  EOQ
+}
 query "is_app_in_maintenance" {
   description = "Is the app in maintenance"
   sql         = <<-EOQ
@@ -163,6 +182,10 @@ dashboard "dashboard_bigint" {
   container {
     text {
       value = "## Ici, tout doit être vert avant de démarrer la migration"
+    }
+    card {
+      query = query.freshping_paused
+      width = 2
     }
     card {
       query = query.is_app_in_maintenance

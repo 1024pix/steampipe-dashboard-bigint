@@ -4,7 +4,7 @@ query "is_app_in_maintenance" {
     select
       $1 as label,
       case
-        when count(*) > 0 then 'En maintenance '
+        when count(*) > 0 then 'En maintenance'
         else 'Running'
       end as value,
       case
@@ -55,11 +55,11 @@ query "is_app_down" {
   }
 }
 
-query "connections_number" {
+query "connection_number" {
   description = "Number of connections to postgres"
   sql = <<-EOQ
     select
-     'Nombre de connexions '|| $1  as label,
+     'Nombre de connexions '|| $1 as label,
       attributes['data']['database_stats']['current_connections'] as value
     from
        datadog_log_event
@@ -79,6 +79,26 @@ query "connections_number" {
   }
 }
 
+query "connections_number" {
+  description = "Number of connections to postgres"
+  sql = <<-EOQ
+    select
+      to_char(timestamp, 'dd HH24:MI:SS'),
+      attributes['data']['database_stats']['current_connections'] as "Nombre de connexions"
+    from
+       datadog_log_event
+    where
+      query = 'service:pix-db-stats-production @event:db-metrics @app:'|| $1
+    order by
+      timestamp desc
+    limit 3600
+  EOQ
+
+  param "app_name" {
+    description = "The scalingo app name"
+  }
+}
+
 dashboard "dashboard_bigint" {
   title = "Dashboard Big int"
 
@@ -89,19 +109,19 @@ dashboard "dashboard_bigint" {
   container {
     card {
       type = "info"
-      query = query.connections_number
+      query = query.connection_number
       args = ["api", "pix-api-production"]
       width = 3
     }
     card {
       type = "info"
-      query = query.connections_number
+      query = query.connection_number
       args = ["datawarehouse", "pix-datawarehouse-production"]
       width = 3
     }
     card {
       type = "info"
-      query = query.connections_number
+      query = query.connection_number
       args = ["dawarehouse-ex", "pix-datawarehouse-ex-production"]
       width = 3
     }
@@ -172,8 +192,9 @@ dashboard "dashboard_bigint" {
 
   container {
     text {
-      value = "Graphs BDD"
+      value = "Graphs BDD api-production"
     }
+
     chart {
       type = "line"
       title = "Nombre de connexions a la BDD"
@@ -196,18 +217,8 @@ dashboard "dashboard_bigint" {
         }
       }
 
-      sql = <<-EOQ
-        select
-          to_char(timestamp, 'dd HH24:MI:SS'),
-          attributes['data']['database_stats']['current_connections'] as "Nombre de connexions"
-        from
-           datadog_log_event
-        where
-          query = 'service:pix-db-stats-production @event:db-metrics @app:pix-api-production'
-        order by
-          timestamp desc
-        limit 3600
-      EOQ
+      query = query.connections_number
+      args = ["pix-api-production"]
     }
   }
 }

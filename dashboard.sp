@@ -99,14 +99,43 @@ query "connections_number" {
   }
 }
 
+
+
 dashboard "dashboard_bigint" {
   title = "Dashboard Big int"
 
   text {
     value = "Suivi de la migration de la table answers en big int"
   }
+ container {
 
+    text {
+      value = "Statistiques des conteneurs one-off"
+    }
+
+    table {
+      title = "Conteneurs en cours d'exécution"
+      width = 4
+
+
+      sql   = <<-EOQ
+        with hosts as (
+                  select host,
+                  attributes['msg']::text as message
+                  from datadog_log_event
+                  where
+                  query = 'service:pix-api-production host:*one\-off*'
+                  and
+                  timestamp >= (current_date - interval '2' minute)
+        )
+        select distinct(host) from hosts where message = '"alive"';
+      EOQ
+    }
+ }
   container {
+    text {
+      value = "Graphs BDD api-production"
+    }
     card {
       type = "info"
       query = query.connection_number

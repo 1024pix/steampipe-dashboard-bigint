@@ -154,6 +154,7 @@ dashboard "dashboard_bigint" {
     card {
       type = "info"
       query = query.connection_number
+      icon = "link"
       args = {
         app_label = "API"
         app_name = "pix-api-production"
@@ -163,6 +164,7 @@ dashboard "dashboard_bigint" {
     card {
       type = "info"
       query = query.connection_number
+      icon = "link"
       args = {
         app_label = "datawarehouse"
         app_name = "pix-datawarehouse-production"
@@ -172,6 +174,7 @@ dashboard "dashboard_bigint" {
     card {
       type = "info"
       query = query.connection_number
+      icon = "link"
       args = {
         app_label = "datawarehouse-ex"
         app_name = "pix-datawarehouse-ex-production"
@@ -185,10 +188,12 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.freshping_paused
+      icon = "check"
       width = 2
     }
     card {
       query = query.is_app_in_maintenance
+      icon = "user"
       args = {
         app_label = "Pix App"
         app_url = "https://app.pix.fr"
@@ -197,6 +202,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_in_maintenance
+      icon = "academic-cap"
       args = {
         app_label = "Pix Certif"
         app_url = "https://certif.pix.fr"
@@ -205,6 +211,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_in_maintenance
+      icon = "academic-cap"
       args = {
         app_label = "Pix Orga"
         app_url = "https://orga.pix.fr"
@@ -213,6 +220,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_down
+      icon = "server"
       args = {
         app_label = "Pix API"
         app_name = "pix-api-production"
@@ -221,6 +229,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_down
+      icon = "chart-bar"
       args = {
         app_label = "Metabase"
         app_name = "pix-metabase-production"
@@ -229,6 +238,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_down
+      icon = "database"
       args = {
         app_label = "datawarehouse"
         app_name = "pix-datawarehouse-production"
@@ -237,6 +247,7 @@ dashboard "dashboard_bigint" {
     }
     card {
       query = query.is_app_down
+      icon = "database"
       args = {
         app_label = "datawarehouse-ex"
         app_name = "pix-datawarehouse-ex-production"

@@ -4,26 +4,24 @@ query "is_app_in_maintenance" {
     select
       $1 as label,
       case
-        when count(*) > 0 then 'En maintenance'
+        when response_status_code = 503 then 'En maintenance'
         else 'Running'
       end as value,
       case
-        when count(*) > 0 then 'ok'
+        when response_status_code = 503  then 'ok'
         else 'alert'
       end as type
     from
-      scalingo_app a
-    join
-      scalingo_environment e on e.app_name = a.name and e.name = 'MAINTENANCE_PLANIFIEE' and e.value = 'enabled'
+      net_http_request
     where
-      a.name = $2;
+      url = $2
   EOQ
 
   param "app_label" {
     description = "The app label"
   }
-  param "app_name" {
-    description = "The app name"
+  param "app_url" {
+    description = "The app url"
   }
 }
 query "is_app_down" {
@@ -139,19 +137,28 @@ dashboard "dashboard_bigint" {
     card {
       type = "info"
       query = query.connection_number
-      args = ["api", "pix-api-production"]
+      args = {
+        app_label = "API"
+        app_name = "pix-api-production"
+      }
       width = 3
     }
     card {
       type = "info"
       query = query.connection_number
-      args = ["datawarehouse", "pix-datawarehouse-production"]
+      args = {
+        app_label = "datawarehouse"
+        app_name = "pix-datawarehouse-production"
+      }
       width = 3
     }
     card {
       type = "info"
       query = query.connection_number
-      args = ["dawarehouse-ex", "pix-datawarehouse-ex-production"]
+      args = {
+        app_label = "datawarehouse-ex"
+        app_name = "pix-datawarehouse-ex-production"
+      }
       width = 3
     }
   }
@@ -162,56 +169,56 @@ dashboard "dashboard_bigint" {
     card {
       query = query.is_app_in_maintenance
       args = {
-        "app_label": "Pix App",
-        "app_name": "pix-app-production"
+        app_label = "Pix App"
+        app_url = "https://app.pix.fr"
       }
       width = 2
     }
     card {
       query = query.is_app_in_maintenance
       args = {
-        "app_label": "Pix Certif",
-        "app_name": "pix-certif-production"
+        app_label = "Pix Certif"
+        app_url = "https://certif.pix.fr"
       }
       width = 2
     }
     card {
       query = query.is_app_in_maintenance
       args = {
-        "app_label": "Pix Orga",
-        "app_name": "pix-orga-production"
+        app_label = "Pix Orga"
+        app_url = "https://orga.pix.fr"
       }
       width = 2
     }
     card {
       query = query.is_app_down
       args = {
-        "app_label": "Pix API",
-        "app_name": "pix-api-production"
+        app_label = "Pix API"
+        app_name = "pix-api-production"
       }
       width = 2
     }
     card {
       query = query.is_app_down
       args = {
-        "app_label": "Metabase",
-        "app_name": "pix-metabase-production"
+        app_label = "Metabase"
+        app_name = "pix-metabase-production"
       }
       width = 2
     }
     card {
       query = query.is_app_down
       args = {
-        "app_label": "datawarehouse",
-        "app_name": "pix-datawarehouse-production"
+        app_label = "datawarehouse"
+        app_name = "pix-datawarehouse-production"
       }
       width = 2
     }
     card {
       query = query.is_app_down
       args = {
-        "app_label": "datawarehouse-ex",
-        "app_name": "pix-datawarehouse-ex-production"
+        app_label = "datawarehouse-ex"
+        app_name = "pix-datawarehouse-ex-production"
       }
       width = 2
     }

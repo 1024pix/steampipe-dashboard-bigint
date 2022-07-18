@@ -97,18 +97,16 @@ query "connections_number" {
   }
 }
 
-
-
 dashboard "dashboard_bigint" {
   title = "Dashboard Big int"
 
   text {
-    value = "Suivi de la migration de la table answers en big int"
+    value = "# Suivi de la migration de la table answers en big int"
   }
  container {
 
     text {
-      value = "Statistiques des conteneurs one-off"
+      value = "## Statistiques des conteneurs one-off"
     }
 
     table {
@@ -132,7 +130,7 @@ dashboard "dashboard_bigint" {
  }
   container {
     text {
-      value = "Graphs BDD api-production"
+      value = "## Stats connexions aux bdd"
     }
     card {
       type = "info"
@@ -164,7 +162,7 @@ dashboard "dashboard_bigint" {
   }
   container {
     text {
-      value = "Ici, tout doit être vert avant de démarrer la migration"
+      value = "## Ici, tout doit être vert avant de démarrer la migration"
     }
     card {
       query = query.is_app_in_maintenance
@@ -249,7 +247,7 @@ dashboard "dashboard_bigint" {
 
   container {
     text {
-      value = "Graphs BDD api-production"
+      value = "## Graphs BDD api-production"
     }
 
     chart {

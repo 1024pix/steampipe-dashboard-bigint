@@ -1,1 +1,1 @@
-web: steampipe dashboard --mod-install --dashboard-port $PORT
+web: exec steampipe dashboard --mod-install --dashboard-port $PORT

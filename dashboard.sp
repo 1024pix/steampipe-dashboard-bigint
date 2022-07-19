@@ -188,13 +188,13 @@ dashboard "dashboard_bigint" {
 
   text {
     value = <<-EOQ
-# Suivi de la migration de la table answers en big int
+      # Suivi de la migration de la table answers en big int
 
-Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
+      Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
 
-Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien à votre place, mais sur une seule page, vous savez ce qu'il se passe.
+      Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien à votre place, mais sur une seule page, vous savez ce qu'il se passe.
 
-Bonne nuit.
+      Bonne nuit.
     EOQ
   }
 
@@ -203,7 +203,7 @@ Bonne nuit.
 
     text {
       value = <<-EOQ
-Une fois tout vert, vous pouvez passer à l'étape suivante. Tout doit rester vert pendant tout la migration. Sinon quelque chose a changé manuellement.
+        Une fois tout vert, vous pouvez passer à l'étape suivante. Tout doit rester vert pendant tout la migration. Sinon quelque chose a changé manuellement.
       EOQ
     }
 
@@ -305,9 +305,9 @@ Une fois tout vert, vous pouvez passer à l'étape suivante. Tout doit rester ve
 
     text {
       value = <<-EOQ
-Bravo d'être arrivé jusque ici. Si tout est vert au point 1, et si la migration n'a pas commencé, les compteurs ci-dessous doivent être à **0**. Si ce n'est pas le cas, il faut trouver la raison et couper l'accès.
+        Bravo d'être arrivé jusque ici. Si tout est vert au point 1, et si la migration n'a pas commencé, les compteurs ci-dessous doivent être à **0**. Si ce n'est pas le cas, il faut trouver la raison et couper l'accès.
 
-Une fois l'opération lancée, on peut s'attendre a 1/2 connexions par environnement.
+        Une fois l'opération lancée, on peut s'attendre a 1/2 connexions par environnement.
       EOQ
     }
 
@@ -348,7 +348,7 @@ Une fois l'opération lancée, on peut s'attendre a 1/2 connexions par environne
 
     text {
       value = <<-EOQ
-Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on peut suivre les conteneurs one-off qui sont en cours d'execution et le suivi du plan (ENCORE EN CHANTIER)
+        Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on peut suivre les conteneurs one-off qui sont en cours d'execution et le suivi du plan (ENCORE EN CHANTIER)
       EOQ
     }
 
@@ -484,7 +484,7 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
 
     text {
       value = <<-EOQ
-Bravo, la migration a fonctionné, ou peut être que non, et la nuit et la journée n'ont peut être pas été bonnes. Mais il temps de remonter la prod. Aller au point 1, et faites en sorte que tout soit rouge. Oui c'est bizarre. Mais c'est comme ça.
+        Bravo, la migration a fonctionné, ou peut être que non, et la nuit et la journée n'ont peut être pas été bonnes. Mais il temps de remonter la prod. Aller au point 1, et faites en sorte que tout soit rouge. Oui c'est bizarre. Mais c'est comme ça.
       EOQ
     }
   }

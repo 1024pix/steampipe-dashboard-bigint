@@ -190,11 +190,9 @@ dashboard "dashboard_bigint" {
   text {
     value = "# Suivi de la migration de la table answers en big int"
   }
- container {
 
-    text {
-      value = "## Statistiques des conteneurs one-off"
-    }
+  container {
+    title = "Statistiques des conteneurs one-off"
 
     table {
       title = "Conteneurs en cours d'exécution"
@@ -214,11 +212,11 @@ dashboard "dashboard_bigint" {
         select distinct(host) from hosts where message = '"alive"';
       EOQ
     }
- }
+  }
+
   container {
-    text {
-      value = "## Stats connexions aux bdd"
-    }
+    title = "Stats connexions aux bdd"
+
     card {
       type = "info"
       query = query.connection_number
@@ -251,9 +249,8 @@ dashboard "dashboard_bigint" {
     }
   }
   container {
-    text {
-      value = "## Ici, tout doit être vert avant de démarrer la migration"
-    }
+    title = "Ici, tout doit être vert avant de démarrer la migration"
+
     card {
       query = query.freshping_paused
       icon = "check"
@@ -348,9 +345,7 @@ dashboard "dashboard_bigint" {
   }
 
   container {
-    text {
-      value = "## Graphs BDD api-production"
-    }
+    title = "Graphs BDD api-production"
 
     chart {
       base = chart.graph_database

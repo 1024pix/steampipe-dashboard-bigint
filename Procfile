@@ -1,1 +1,1 @@
-web: exec steampipe dashboard --mod-install --dashboard-port $PORT
+web: ./bin/steampipe dashboard --mod-install --dashboard-port $PORT --dashboard-listen network

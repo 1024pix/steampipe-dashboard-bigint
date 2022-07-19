@@ -51,19 +51,17 @@ query "is_app_down" {
     select
       $1 as label,
       case
-        when sum(c.amount) = 0 then 'Down'
-        else 'Running (' || sum(c.amount)  ||')'
+        when sum(amount) = 0 then 'Down'
+        else 'Running (' || sum(amount)  ||')'
       end as value,
       case
-        when sum(c.amount) = 0 then 'ok'
+        when sum(amount) = 0 then 'ok'
         else 'alert'
       end as type
     from
-      scalingo_app a
-    join
-      scalingo_container_type c on c.app_name = a.name
+      scalingo_container_type
     where
-      a.name = $2;
+      app_name = $2;
   EOQ
 
   param "app_label" {

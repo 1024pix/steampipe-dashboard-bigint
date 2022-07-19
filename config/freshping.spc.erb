@@ -7,8 +7,8 @@ connection "freshping" {
     # 2. Go to settings > Account settings
     # 3. Copy API Key
     # See https://support.freshping.io/en/support/solutions/articles/50000003709-freshping-api-documentation#Authentication
-    key = ""
+    key = "<%= ENV['FRESHPING_KEY'] %>"
 
     # Your freshping subdomain
-    subdomain = ""
+    subdomain = "<%= ENV['FRESHPING_SUBDOMAIN'] %>"
 }

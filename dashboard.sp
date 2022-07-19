@@ -357,23 +357,49 @@ dashboard "dashboard_bigint" {
       width = 4
 
       sql   = <<-EOQ
-        with hosts as (
+        with messages_alive as (
           select
             host,
-            attributes['msg']::text as message
+            timestamp
           from
             datadog_log_event
           where
-            query = 'service:pix-api-production host:*one\-off*'
+            query = 'service:pix-api-production host:*one\-off* @msg:alive'
+          order by
+            timestamp desc
+        ),
+        messages_not_alive as (
+          select
+            host,
+            timestamp,
+            attributes['msg'] as message
+          from
+            datadog_log_event
+          where
+            query = 'service:pix-api-production host:*one\-off* -@msg:alive'
             and
-            timestamp >= (current_date - interval '2' minute)
+            timestamp >= (current_date - interval '1' day)
+          order by
+            timestamp desc
+        ),
+        last_timestamp as (
+          select
+            distinct on (host) host,
+            timestamp
+          from
+            messages_alive
+          order by
+            host
         )
         select
-          distinct(host)
+          distinct on (lt.host) lt.host,
+          lt.timestamp as last_alive_at,
+          ma.message as current_step,
+          ma.timestamp as current_step_started_at
         from
-          hosts
-        where
-          message = '"alive"';
+          last_timestamp lt
+        join
+          messages_not_alive ma on ma.host = lt.host
       EOQ
     }
 

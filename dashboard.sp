@@ -189,11 +189,25 @@ dashboard "dashboard_bigint" {
   title = "Dashboard Big int"
 
   text {
-    value = "# Suivi de la migration de la table answers en big int"
+    value = <<-EOQ
+# Suivi de la migration de la table answers en big int"
+
+Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
+
+La suite de ce dashboard correspond a l'exécution de celui ci.
+
+Bonne nuit.
+    EOQ
   }
 
   container { # Status des applications avant la MEP
-    title = "Ici, tout doit être vert avant de démarrer la migration"
+    title = "1. Ici, tout doit être vert avant de démarrer la migration"
+
+    text {
+      value = <<-EOQ
+Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester vert pendant tout la migration. Sinon quelque a changé manuellement.
+      EOQ
+    }
 
     card {
       query = query.freshping_paused
@@ -289,7 +303,15 @@ dashboard "dashboard_bigint" {
   }
 
   container { # Connexions BDD
-    title = "Statistiques connexions aux bdd"
+    title = "2. Statistiques connexions aux bdd"
+
+    text {
+      value = <<-EOQ
+Bravo d'être arrivé jusque ici. Si la tout est vert au point 1, et si la migration n'a pas commencé, les compteurs ci-dessous doivent être à **0**. Si ce n'est pas le cas, il faut trouver la raison et couper l'accès.
+
+Une fois lancé, on peut s'attendre a 1/2 connexions par environnement.
+      EOQ
+    }
 
     card {
       type = "info"
@@ -324,31 +346,48 @@ dashboard "dashboard_bigint" {
   }
 
   container { # Opérations en cours de MEP
+    title = "3. OK, c'est parti"
 
-    title = "Statistiques des conteneurs one-off"
+    text {
+      value = <<-EOQ
+Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on peut suivre les conteneurs one-off qui sont en cours d'execution et le suivi du plan (ENCORE EN CHANTIER)
+      EOQ
+    }
 
-      table {
-        title = "Conteneurs en cours d'exécution"
-        width = 4
+    table {
+      title = "Conteneurs en cours d'exécution"
+      width = 4
 
-
-        sql   = <<-EOQ
-          with hosts as (
-                    select host,
-                    attributes['msg']::text as message
-                    from datadog_log_event
-                    where
-                    query = 'service:pix-api-production host:*one\-off*'
-                    and
-                    timestamp >= (current_date - interval '2' minute)
-          )
-          select distinct(host) from hosts where message = '"alive"';
-        EOQ
-      }
+      sql   = <<-EOQ
+        with hosts as (
+          select
+             host,
+             attributes['msg']::text as message
+           from
+              datadog_log_event
+           where
+             query = 'service:pix-api-production host:*one\-off*'
+             and
+            timestamp >= (current_date - interval '2' minute)
+        )
+        select
+          distinct(host)
+        from
+          hosts
+        where
+         message = '"alive"';
+      EOQ
+    }
   }
 
   container { # Graphs de BDD api-production
-    title= "Graphs BDD api-production"
+    title = "Graphs BDD api-production"
+
+    text {
+      value = <<-EOQ
+        Comme sur Datadog ou Scalingo, mais du coup ici, c'est sympa non ?
+      EOQ
+    }
 
     chart {
       base = chart.graph_database
@@ -381,9 +420,15 @@ dashboard "dashboard_bigint" {
   }
 
   container { # Graphs de BDD datawarehouse-production
-      title = "Graphs BDD datawarehouse-production"
+    title = "Graphs BDD datawarehouse-production"
 
-  chart {
+    text {
+      value = <<-EOQ
+        Tout pareil que au-dessus, mais pour datawarehouse. Trop cool non ?
+      EOQ
+    }
+
+    chart {
       base = chart.graph_database
       title = "Nombre de connexions a la BDD"
       args = {

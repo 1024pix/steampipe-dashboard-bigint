@@ -17,6 +17,7 @@ query "freshping_paused" {
       status != 'PS'
   EOQ
 }
+
 query "is_app_in_maintenance" {
   description = "Is the app in maintenance"
   sql         = <<-EOQ
@@ -43,6 +44,7 @@ query "is_app_in_maintenance" {
     description = "The app url"
   }
 }
+
 query "is_app_down" {
   description = "Is the app has all containers down"
   sql         = <<-EOQ
@@ -72,7 +74,7 @@ query "is_app_down" {
   }
 }
 
-query "connection_number" {
+query "last_connection_number" {
   description = "Number of connections to postgres"
   sql = <<-EOQ
     select
@@ -123,7 +125,7 @@ query "database_cpu" {
       to_char(timestamp, 'dd HH24:MI:SS') as "Time",
       attributes['data']['cpu'] as "CPU"
     from
-       datadog_log_event
+      datadog_log_event
     where
       query = 'service:pix-db-stats-production @event:leader-cpu @app:'|| $1
     order by
@@ -136,7 +138,6 @@ query "database_cpu" {
   }
 }
 
-
 query "database_io" {
   description = "IO postgres"
   sql = <<-EOQ
@@ -145,7 +146,7 @@ query "database_io" {
       attributes['data']['diskio_writes'] as "IO write",
       attributes['data']['diskio_reads'] as "IO reads"
     from
-       datadog_log_event
+      datadog_log_event
     where
       query = 'service:pix-db-stats-production @event:db-diskio @app:'|| $1
     order by
@@ -191,64 +192,7 @@ dashboard "dashboard_bigint" {
     value = "# Suivi de la migration de la table answers en big int"
   }
 
-  container {
-    title = "Statistiques des conteneurs one-off"
-
-    table {
-      title = "Conteneurs en cours d'exécution"
-      width = 4
-
-
-      sql   = <<-EOQ
-        with hosts as (
-                  select host,
-                  attributes['msg']::text as message
-                  from datadog_log_event
-                  where
-                  query = 'service:pix-api-production host:*one\-off*'
-                  and
-                  timestamp >= (current_date - interval '2' minute)
-        )
-        select distinct(host) from hosts where message = '"alive"';
-      EOQ
-    }
-  }
-
-  container {
-    title = "Stats connexions aux bdd"
-
-    card {
-      type = "info"
-      query = query.connection_number
-      icon = "link"
-      args = {
-        app_label = "API"
-        app_name = "pix-api-production"
-      }
-      width = 3
-    }
-    card {
-      type = "info"
-      query = query.connection_number
-      icon = "link"
-      args = {
-        app_label = "datawarehouse"
-        app_name = "pix-datawarehouse-production"
-      }
-      width = 3
-    }
-    card {
-      type = "info"
-      query = query.connection_number
-      icon = "link"
-      args = {
-        app_label = "datawarehouse-ex"
-        app_name = "pix-datawarehouse-ex-production"
-      }
-      width = 3
-    }
-  }
-  container {
+  container { # Status des applications avant la MEP
     title = "Ici, tout doit être vert avant de démarrer la migration"
 
     card {
@@ -344,8 +288,67 @@ dashboard "dashboard_bigint" {
     }
   }
 
-  container {
-    title = "Graphs BDD api-production"
+  container { # Connexions BDD
+    title = "Statistiques connexions aux bdd"
+
+    card {
+      type = "info"
+      query = query.last_connection_number
+      icon = "link"
+      args = {
+        app_label = "API"
+        app_name = "pix-api-production"
+      }
+      width = 3
+    }
+    card {
+      type = "info"
+      query = query.last_connection_number
+      icon = "link"
+      args = {
+        app_label = "datawarehouse"
+        app_name = "pix-datawarehouse-production"
+      }
+      width = 3
+    }
+    card {
+      type = "info"
+      query = query.last_connection_number
+      icon = "link"
+      args = {
+        app_label = "datawarehouse-ex"
+        app_name = "pix-datawarehouse-ex-production"
+      }
+      width = 3
+    }
+  }
+
+  container { # Opérations en cours de MEP
+
+    title = "Statistiques des conteneurs one-off"
+
+      table {
+        title = "Conteneurs en cours d'exécution"
+        width = 4
+
+
+        sql   = <<-EOQ
+          with hosts as (
+                    select host,
+                    attributes['msg']::text as message
+                    from datadog_log_event
+                    where
+                    query = 'service:pix-api-production host:*one\-off*'
+                    and
+                    timestamp >= (current_date - interval '2' minute)
+          )
+          select distinct(host) from hosts where message = '"alive"';
+        EOQ
+      }
+  }
+
+  container { # Graphs de BDD api-production
+    title= "Graphs BDD api-production"
 
     chart {
       base = chart.graph_database
@@ -364,6 +367,47 @@ dashboard "dashboard_bigint" {
     chart {
       base = chart.graph_database
       title = "IO BDD"
+
+      query = query.database_io
+
+      series "IO write" {
+        color = "red"
+      }
+
+      series "IO read" {
+        color = "blue"
+      }
+    }
+  }
+
+  container { # Graphs de BDD datawarehouse-production
+      title = "Graphs BDD datawarehouse-production"
+
+  chart {
+      base = chart.graph_database
+      title = "Nombre de connexions a la BDD"
+      args = {
+        app_name = "pix-datawarehouse-production"
+      }
+      query = query.connections_number
+    }
+
+    chart {
+      base = chart.graph_database
+      title = "CPU BDD"
+      args = {
+        app_name = "pix-datawarehouse-production"
+      }
+
+      query = query.database_cpu
+    }
+
+    chart {
+      base = chart.graph_database
+      title = "IO BDD"
+      args = {
+        app_name = "pix-datawarehouse-production"
+      }
 
       query = query.database_io
 

@@ -355,7 +355,7 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
     }
 
     table {
-      title = "Conteneurs en cours d'exécution"
+      title = "Conteneurs de migration en cours d'exécution"
       width = 4
 
       sql   = <<-EOQ
@@ -376,6 +376,21 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
           hosts
         where
           message = '"alive"';
+      EOQ
+    }
+
+    table {
+      title = "Conteneurs one-off sur api"
+      width = 4
+      sql   = <<-EOQ
+        select
+          label,
+          state,
+          created_at
+        from
+          scalingo_container
+        where
+          app_name='pix-api-production' and type='one-off';
       EOQ
     }
   }

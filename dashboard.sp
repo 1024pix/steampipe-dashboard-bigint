@@ -194,7 +194,7 @@ dashboard "dashboard_bigint" {
 
 Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
 
-Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien a votre place, mais sur une seule page, vous savez ce qui se passe.
+Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien à votre place, mais sur une seule page, vous savez ce qu'il se passe.
 
 Bonne nuit.
     EOQ
@@ -205,7 +205,7 @@ Bonne nuit.
 
     text {
       value = <<-EOQ
-Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester vert pendant tout la migration. Sinon quelque a changé manuellement.
+Une fois tout vert, vous pouvez passer à l'étape suivante. Tout doit rester vert pendant tout la migration. Sinon quelque chose a changé manuellement.
       EOQ
     }
 
@@ -307,9 +307,9 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
 
     text {
       value = <<-EOQ
-Bravo d'être arrivé jusque ici. Si la tout est vert au point 1, et si la migration n'a pas commencé, les compteurs ci-dessous doivent être à **0**. Si ce n'est pas le cas, il faut trouver la raison et couper l'accès.
+Bravo d'être arrivé jusque ici. Si tout est vert au point 1, et si la migration n'a pas commencé, les compteurs ci-dessous doivent être à **0**. Si ce n'est pas le cas, il faut trouver la raison et couper l'accès.
 
-Une fois lancé, on peut s'attendre a 1/2 connexions par environnement.
+Une fois l'opération lancée, on peut s'attendre a 1/2 connexions par environnement.
       EOQ
     }
 
@@ -361,13 +361,13 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
       sql   = <<-EOQ
         with hosts as (
           select
-             host,
-             attributes['msg']::text as message
-           from
-              datadog_log_event
-           where
-             query = 'service:pix-api-production host:*one\-off*'
-             and
+            host,
+            attributes['msg']::text as message
+          from
+            datadog_log_event
+          where
+            query = 'service:pix-api-production host:*one\-off*'
+            and
             timestamp >= (current_date - interval '2' minute)
         )
         select
@@ -375,7 +375,7 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
         from
           hosts
         where
-         message = '"alive"';
+          message = '"alive"';
       EOQ
     }
   }
@@ -471,7 +471,7 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
 
     text {
       value = <<-EOQ
-Bravo, la migration a fonctionner, ou peut être que non, et la nuit et la journée n'ont peut être pas été bonnes. Mais il temps de remonter la prod. Aller au point 1, et faites en sorte que tout soit rouge. Oui c'est bizarre.
+Bravo, la migration a fonctionné, ou peut être que non, et la nuit et la journée n'ont peut être pas été bonnes. Mais il temps de remonter la prod. Aller au point 1, et faites en sorte que tout soit rouge. Oui c'est bizarre. Mais c'est comme ça.
       EOQ
     }
   }

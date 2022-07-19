@@ -212,7 +212,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
     card {
       query = query.freshping_paused
       icon = "check"
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_in_maintenance
@@ -221,7 +221,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "Pix App"
         app_url = "https://app.pix.fr"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_in_maintenance
@@ -230,7 +230,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "Pix Certif"
         app_url = "https://certif.pix.fr"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_in_maintenance
@@ -239,7 +239,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "Pix Orga"
         app_url = "https://orga.pix.fr"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_down
@@ -248,7 +248,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "Pix API"
         app_name = "pix-api-production"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_down
@@ -257,7 +257,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "Metabase"
         app_name = "pix-metabase-production"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_down
@@ -266,7 +266,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "datawarehouse"
         app_name = "pix-datawarehouse-production"
       }
-      width = 2
+      width = 3
     }
     card {
       query = query.is_app_down
@@ -275,7 +275,7 @@ Une fois tout vert, vous pouvez passez a l'étape suivante. Tout doit rester ver
         app_label = "datawarehouse-ex"
         app_name = "pix-datawarehouse-ex-production"
       }
-      width = 2
+      width = 3
     }
     card {
       sql = <<-EOQ

@@ -5,7 +5,7 @@ query "freshping_paused" {
       'Freshping monitoring' as label,
       case
         when count(*) = 0 then 'Paused'
-        else 'Not paused'
+        else 'Not paused ('|| count(*) ||')'
       end as value,
       case
         when count(*) = 0 then 'ok'

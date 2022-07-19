@@ -61,7 +61,7 @@ query "is_app_down" {
     from
       scalingo_app a
     join
-      scalingo_container c on c.app_name = a.name
+      scalingo_container_type c on c.app_name = a.name
     where
       a.name = $2;
   EOQ

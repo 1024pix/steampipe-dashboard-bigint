@@ -1,0 +1,5 @@
+connection "scalingo" {
+  plugin      = "francois2metz/scalingo"
+  token       = "<%= ENV['SCALINGO_TOKEN'] %>"
+  regions     = ["osc-secnum-fr1"]
+}

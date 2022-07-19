@@ -353,8 +353,8 @@ dashboard "dashboard_bigint" {
     }
 
     table {
-      title = "Conteneurs de migration en cours d'exécution"
-      width = 4
+      title = "Conteneurs de migration en cours d'exécution (5 dernières minutes)"
+      width = 8
 
       sql   = <<-EOQ
         with messages_alive as (
@@ -364,7 +364,9 @@ dashboard "dashboard_bigint" {
           from
             datadog_log_event
           where
-            query = 'service:pix-api-production host:*one\-off* @msg:alive'
+            query = 'service:'|| $1 ||' host:*one\-off* @msg:alive'
+            and
+            timestamp >= (current_timestamp - interval '5' minute)
           order by
             timestamp desc
         ),
@@ -376,7 +378,7 @@ dashboard "dashboard_bigint" {
           from
             datadog_log_event
           where
-            query = 'service:pix-api-production host:*one\-off* -@msg:alive'
+            query = 'service:'|| $1 ||' host:*one\-off* -@msg:alive'
             and
             timestamp >= (current_date - interval '1' day)
           order by
@@ -401,6 +403,8 @@ dashboard "dashboard_bigint" {
         join
           messages_not_alive ma on ma.host = lt.host
       EOQ
+
+      args = ["pix-api-production"]
     }
 
     table {

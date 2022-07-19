@@ -194,7 +194,7 @@ dashboard "dashboard_bigint" {
 
 Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
 
-La suite de ce dashboard correspond a l'exécution de celui ci.
+Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien a votre place, mais sur une seule page, vous savez ce qui se passe.
 
 Bonne nuit.
     EOQ

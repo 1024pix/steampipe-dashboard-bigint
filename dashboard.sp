@@ -190,7 +190,7 @@ dashboard "dashboard_bigint" {
 
   text {
     value = <<-EOQ
-# Suivi de la migration de la table answers en big int"
+# Suivi de la migration de la table answers en big int
 
 Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
 

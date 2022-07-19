@@ -374,7 +374,7 @@ dashboard "dashboard_bigint" {
           select
             host,
             timestamp,
-            attributes['msg'] as message
+            attributes->>'msg' as message
           from
             datadog_log_event
           where
@@ -397,7 +397,14 @@ dashboard "dashboard_bigint" {
           distinct on (lt.host) lt.host,
           lt.timestamp as last_alive_at,
           ma.message as current_step,
-          ma.timestamp as current_step_started_at
+          ma.timestamp as current_step_started_at,
+          case
+            when ma.message = 'Altering knowledge-elements.answerId type to BIGINT - In progress' then '1/4'
+            when ma.message = 'Altering flash-assessment-results.answerId type to BIGINT - In progress' then '2/4'
+            when ma.message = 'Altering answers.id type to BIGINT - In progress' then '3/4'
+            when ma.message = 'Altering answers_id_seq type to BIGINT - In progress' then '4/4'
+            else 'unknown'
+          end as progress
         from
           last_timestamp lt
         join

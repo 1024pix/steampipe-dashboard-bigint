@@ -100,7 +100,7 @@ query "connections_number" {
   description = "Number of connections to postgres"
   sql = <<-EOQ
     select
-      to_char(timestamp, 'dd HH24:MI:SS'),
+      to_char(timestamp, 'dd HH24:MI:SS') as "Time",
       attributes['data']['database_stats']['current_connections'] as "Nombre de connexions"
     from
        datadog_log_event
@@ -114,6 +114,74 @@ query "connections_number" {
   param "app_name" {
     description = "The scalingo app name"
   }
+}
+
+query "database_cpu" {
+  description = "CPU postgres"
+  sql = <<-EOQ
+    select
+      to_char(timestamp, 'dd HH24:MI:SS') as "Time",
+      attributes['data']['cpu'] as "CPU"
+    from
+       datadog_log_event
+    where
+      query = 'service:pix-db-stats-production @event:leader-cpu @app:'|| $1
+    order by
+      timestamp desc
+    limit 3600
+  EOQ
+
+  param "app_name" {
+    description = "The scalingo app name"
+  }
+}
+
+
+query "database_io" {
+  description = "IO postgres"
+  sql = <<-EOQ
+    select
+      to_char(timestamp, 'dd HH24:MI:SS') as "Time",
+      attributes['data']['diskio_writes'] as "IO write",
+      attributes['data']['diskio_reads'] as "IO reads"
+    from
+       datadog_log_event
+    where
+      query = 'service:pix-db-stats-production @event:db-diskio @app:'|| $1
+    order by
+      timestamp desc
+    limit 3600
+  EOQ
+
+  param "app_name" {
+    description = "The scalingo app name"
+  }
+}
+
+chart "graph_database" {
+  type = "line"
+
+  axes {
+    x {
+      title {
+        value  = "Time"
+      }
+      labels {
+        display = "auto"
+      }
+    }
+    y {
+      labels {
+        display = "show"
+      }
+    }
+  }
+
+  args = {
+    app_name = "pix-api-production"
+  }
+
+  width = 4
 }
 
 dashboard "dashboard_bigint" {
@@ -285,29 +353,32 @@ dashboard "dashboard_bigint" {
     }
 
     chart {
-      type = "line"
+      base = chart.graph_database
       title = "Nombre de connexions a la BDD"
-      axes {
-        x {
-          title {
-            value  = "Time"
-          }
-          labels {
-            display = "auto"
-          }
-        }
-        y {
-          title {
-            value  = "Nombre de connexions"
-          }
-          labels {
-            display = "show"
-          }
-        }
-      }
 
       query = query.connections_number
-      args = ["pix-api-production"]
+    }
+
+    chart {
+      base = chart.graph_database
+      title = "CPU BDD"
+
+      query = query.database_cpu
+    }
+
+    chart {
+      base = chart.graph_database
+      title = "IO BDD"
+
+      query = query.database_io
+
+      series "IO write" {
+        color = "red"
+      }
+
+      series "IO read" {
+        color = "blue"
+      }
     }
   }
 }

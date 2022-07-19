@@ -465,4 +465,14 @@ Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on p
       }
     }
   }
+
+  container { # Opération de réouverture
+    title = "4. Il est temps de remonter la prod"
+
+    text {
+      value = <<-EOQ
+Bravo, la migration a fonctionner, ou peut être que non, et la nuit et la journée n'ont peut être pas été bonnes. Mais il temps de remonter la prod. Aller au point 1, et faites en sorte que tout soit rouge. Oui c'est bizarre.
+      EOQ
+    }
+  }
 }

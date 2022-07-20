@@ -30,7 +30,8 @@ query "is_app_in_maintenance" {
       case
         when response_status_code = 503  then 'ok'
         else 'alert'
-      end as type
+      end as type,
+      $2 as href
     from
       net_http_request
     where

@@ -8,6 +8,11 @@ variable "scalingo_region" {
   default = "osc-secnum-fr1"
 }
 
+variable "app_url_suffix" {
+  type    = string
+  default = ".pix.fr"
+}
+
 query "freshping_paused" {
   description = "All freshpings checks are paused"
   sql         = <<-EOQ
@@ -41,18 +46,22 @@ query "is_app_in_maintenance" {
         when response_status_code = 503  then 'ok'
         else 'alert'
       end as type,
-      $2 as href
+      'https://'|| $2 || $3 as href
     from
       net_http_request
     where
-      url = $2
+      url = 'https://'|| $2 || $3
   EOQ
 
   param "app_label" {
     description = "The app label"
   }
-  param "app_url" {
-    description = "The app url"
+  param "app_prefix" {
+    description = "The app prefix url"
+  }
+  param "app_suffix" {
+    default     = var.app_url_suffix
+    description = "The app suffix url"
   }
 }
 
@@ -233,7 +242,7 @@ dashboard "dashboard_bigint" {
       icon = "user"
       args = {
         app_label = "Pix App"
-        app_url = "https://app.pix.fr"
+        app_prefix = "app"
       }
       width = 3
     }
@@ -242,7 +251,7 @@ dashboard "dashboard_bigint" {
       icon = "academic-cap"
       args = {
         app_label = "Pix Certif"
-        app_url = "https://certif.pix.fr"
+        app_prefix = "certif"
       }
       width = 3
     }
@@ -251,7 +260,7 @@ dashboard "dashboard_bigint" {
       icon = "academic-cap"
       args = {
         app_label = "Pix Orga"
-        app_url = "https://orga.pix.fr"
+        app_prefix = "orga"
       }
       width = 3
     }
@@ -260,7 +269,7 @@ dashboard "dashboard_bigint" {
       icon = "server"
       args = {
         app_label = "Pix API"
-        app_name = "pix-api-production"
+        app_name = var.scalingo_app_where_migration_will_be_launched
       }
       width = 3
     }
@@ -294,7 +303,7 @@ dashboard "dashboard_bigint" {
     card {
       sql = <<-EOQ
         select
-          'Backup activé sur pix-api-production' as label,
+          'Backup activé sur '|| $1 as label,
           case
             when periodic_backups_enabled then 'Backup activé'
             else 'Backup désactivé'
@@ -310,8 +319,9 @@ dashboard "dashboard_bigint" {
         on
           ad.id = db.addon_id and ad.app_name = db.app_name
         where
-          ad.app_name='pix-api-production'
+          ad.app_name=$1
       EOQ
+      args = [var.scalingo_app_where_migration_will_be_launched]
       width = 3
     }
   }

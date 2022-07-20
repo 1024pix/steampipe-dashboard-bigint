@@ -71,18 +71,18 @@ query "is_app_down" {
     select
       $1 as label,
       case
-        when sum(amount) = 0 then 'Down'
-        else 'Running (' || sum(amount)  ||')'
+        when count(*) = 0 then 'Down'
+        else 'Running (' || count(*)  ||')'
       end as value,
       case
-        when sum(amount) = 0 then 'ok'
+        when count(*) = 0 then 'ok'
         else 'alert'
       end as type,
       'https://dashboard.scalingo.com/apps/'|| $3 ||'/'|| $2 ||'/resources' as href
     from
-      scalingo_container_type
+      scalingo_container
     where
-      app_name = $2;
+      app_name = $2 and type != 'one-off';
   EOQ
 
   param "app_label" {

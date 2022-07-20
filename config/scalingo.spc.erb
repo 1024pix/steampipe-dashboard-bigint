@@ -1,5 +1,17 @@
 connection "scalingo" {
   plugin      = "francois2metz/scalingo"
-  token       = "<%= ENV['SCALINGO_TOKEN'] %>"
-  regions     = ["osc-secnum-fr1"]
+  type        = "aggregator"
+  connections = ["scalingo_*"]
+}
+
+connection "scalingo_osc" {
+  plugin  = "francois2metz/scalingo"
+  token   = "<%= ENV['SCALINGO_TOKEN_OSC'] %>"
+  regions = ["osc-fr1"]
+}
+
+connection "scalingo_secnum" {
+  plugin  = "francois2metz/scalingo"
+  token   = "<%= ENV['SCALINGO_TOKEN'] %>"
+  regions = ["osc-secnum-fr1"]
 }

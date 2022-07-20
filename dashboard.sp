@@ -215,6 +215,8 @@ dashboard "dashboard_bigint" {
     value = <<-EOQ
       # Suivi de la migration de la table answers en big int
 
+      **Les requêtes ici sont cachés 2 min**.
+
       Ceci est le plan: [Plan de MEP Migration](https://1024pix.atlassian.net/wiki/spaces/DEV/pages/3456598017/Plan+de+MEP).
 
       Ce dashboard correspond au suivi de l'exécution de celui ci. Il ne fait rien à votre place, mais sur une seule page, vous savez ce qu'il se passe.

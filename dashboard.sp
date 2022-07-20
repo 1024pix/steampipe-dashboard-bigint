@@ -63,7 +63,8 @@ query "is_app_down" {
       case
         when sum(amount) = 0 then 'ok'
         else 'alert'
-      end as type
+      end as type,
+      'https://dashboard.scalingo.com/apps/osc-secnum-fr1/'|| $2 ||'/resources' as href
     from
       scalingo_container_type
     where

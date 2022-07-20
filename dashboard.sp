@@ -40,7 +40,7 @@ query "is_app_in_maintenance" {
       $1 as label,
       case
         when response_status_code = 503 then 'En maintenance'
-        else 'Running (' || response_status_code || ')'
+        else 'Running (HTTP ' || response_status_code || ')'
       end as value,
       case
         when response_status_code = 503  then 'ok'

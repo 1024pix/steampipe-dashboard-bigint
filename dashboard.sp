@@ -1,3 +1,8 @@
+variable "app_where_migration_will_be_launched" {
+  type    = string
+  default = "pix-api-production"
+}
+
 query "freshping_paused" {
   description = "All freshpings checks are paused"
   sql         = <<-EOQ
@@ -412,7 +417,7 @@ dashboard "dashboard_bigint" {
           messages_not_alive ma on ma.host = lt.host
       EOQ
 
-      args = ["pix-api-production"]
+      args = [var.app_where_migration_will_be_launched]
     }
 
     table {
@@ -426,8 +431,10 @@ dashboard "dashboard_bigint" {
         from
           scalingo_container
         where
-          app_name='pix-api-production' and type='one-off';
+          app_name=$1 and type='one-off';
       EOQ
+
+      args = [var.app_where_migration_will_be_launched]
     }
   }
 
@@ -517,8 +524,42 @@ dashboard "dashboard_bigint" {
     }
   }
 
+  container {
+    title = "4. C'est fini ?"
+
+    card {
+      sql = <<-EOQ
+          select
+            'Est ce que c''est fini?' as label,
+            case
+              when count(*) = 2 then 'OUI'
+              when count(*) = 1 then 'Presque (1/2)'
+              else 'Pas du tout'
+            end as value,
+            case
+              when count(*) = 2 then 'start'
+              when count(*) = 1 then 'emoji-happy'
+              else 'emoji-sad'
+            end as icon,
+            case
+              when count(*) = 2 then 'ok'
+              when count(*) = 1 then 'info'
+              else 'info'
+            end as type
+          from
+            datadog_log_event
+          where
+            query = 'service:'|| $1 ||' host:*one\-off* @msg:"Altering answers_id_seq type to BIGINT - Done"'
+            and
+            timestamp >= (current_timestamp - interval '2' day)
+      EOQ
+
+      args = [var.app_where_migration_will_be_launched]
+    }
+  }
+
   container { # Opération de réouverture
-    title = "4. Il est temps de remonter la prod"
+    title = "5. Il est temps de remonter la prod"
 
     text {
       value = <<-EOQ

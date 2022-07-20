@@ -374,7 +374,18 @@ dashboard "dashboard_bigint" {
 
     text {
       value = <<-EOQ
-        Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on peut suivre les conteneurs one-off qui sont en cours d'execution et le suivi du plan (ENCORE EN CHANTIER)
+        Tout est vert, les compteurs sont a zéro, la migration peut commencer. Ici on peut suivre les conteneurs one-off qui sont en cours d'execution et le suivi du plan.
+
+        Les étapes:
+
+        - Altering knowledge-elements.answerId type to BIGINT - In progress: **~8h30**
+        - Altering knowledge-elements.answerId type to BIGINT - Done
+        - Altering flash-assessment-results.answerId type to BIGINT - In progress: **Immédiat**
+        - Altering flash-assessment-results.answerId type to BIGINT - Done
+        - Altering answers.id type to BIGINT - In progress: **~4h**
+        - Altering answers.id type to BIGINT - Done
+        - Altering answers_id_seq type to BIGINT - In progress: **Immédiat**
+        - Altering answers_id_seq type to BIGINT - Done
       EOQ
     }
 

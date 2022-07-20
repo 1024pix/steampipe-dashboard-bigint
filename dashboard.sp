@@ -1,16 +1,16 @@
 variable "scalingo_app_where_migration_will_be_launched" {
   type    = string
-  default = "pix-api-production"
+  default = "pix-api-recette"
 }
 
 variable "scalingo_region" {
   type    = string
-  default = "osc-secnum-fr1"
+  default = "osc-fr1"
 }
 
 variable "app_url_suffix" {
   type    = string
-  default = ".pix.fr"
+  default = ".recette.pix.fr"
 }
 
 query "freshping_paused" {

@@ -1,6 +1,11 @@
-variable "app_where_migration_will_be_launched" {
+variable "scalingo_app_where_migration_will_be_launched" {
   type    = string
   default = "pix-api-production"
+}
+
+variable "scalingo_region" {
+  type    = string
+  default = "osc-secnum-fr1"
 }
 
 query "freshping_paused" {
@@ -64,7 +69,7 @@ query "is_app_down" {
         when sum(amount) = 0 then 'ok'
         else 'alert'
       end as type,
-      'https://dashboard.scalingo.com/apps/osc-secnum-fr1/'|| $2 ||'/resources' as href
+      'https://dashboard.scalingo.com/apps/'|| $3 ||'/'|| $2 ||'/resources' as href
     from
       scalingo_container_type
     where
@@ -76,6 +81,10 @@ query "is_app_down" {
   }
   param "app_name" {
     description = "The scalingo app name"
+  }
+  param "region" {
+    default = var.scalingo_region
+    description = "The scalingo region"
   }
 }
 
@@ -418,7 +427,7 @@ dashboard "dashboard_bigint" {
           messages_not_alive ma on ma.host = lt.host
       EOQ
 
-      args = [var.app_where_migration_will_be_launched]
+      args = [var.scalingo_app_where_migration_will_be_launched]
     }
 
     table {
@@ -435,7 +444,7 @@ dashboard "dashboard_bigint" {
           app_name=$1 and type='one-off';
       EOQ
 
-      args = [var.app_where_migration_will_be_launched]
+      args = [var.scalingo_app_where_migration_will_be_launched]
     }
   }
 
@@ -555,7 +564,7 @@ dashboard "dashboard_bigint" {
             timestamp >= (current_timestamp - interval '2' day)
       EOQ
 
-      args = [var.app_where_migration_will_be_launched]
+      args = [var.scalingo_app_where_migration_will_be_launched]
     }
   }
 

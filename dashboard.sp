@@ -97,6 +97,34 @@ query "is_app_down" {
   }
 }
 
+query "is_gravitee_api_down" {
+  description = "Is the gravitee API stopped"
+  sql         = <<-EOQ
+    select
+      $1 as label,
+      case
+        when response_status_code = 404 then 'En maintenance'
+        else 'API is still running (HTTP ' || response_status_code || ')'
+      end as value,
+      case
+        when response_status_code = 404  then 'ok'
+        else 'alert'
+      end as type,
+      'https://gateway.pix.fr'|| $2 as href
+    from
+      net_http_request
+    where
+      url = 'https://gateway.pix.fr'|| $2
+  EOQ
+
+  param "app_label" {
+    description = "The app label"
+  }
+  param "app_path" {
+    description = "The app path"
+  }
+}
+
 query "last_connection_number" {
   description = "Number of connections to postgres"
   sql = <<-EOQ
@@ -324,6 +352,33 @@ dashboard "dashboard_bigint" {
           ad.app_name=$1
       EOQ
       args = [var.scalingo_app_where_migration_will_be_launched]
+      width = 3
+    }
+    card {
+      query = query.is_gravitee_api_down
+      icon = "status-online"
+      args = {
+        app_label = "Gravitee Pole Emploi"
+        app_path = "/pole-emploi/envois"
+      }
+      width = 3
+    }
+    card {
+      query = query.is_gravitee_api_down
+      icon = "status-online"
+      args = {
+        app_label = "Gravitee LSU"
+        app_path = "/organizations/1/certifications"
+      }
+      width = 3
+    }
+    card {
+      query = query.is_gravitee_api_down
+      icon = "status-online"
+      args = {
+        app_label = "Gravitee Token"
+        app_path = "/api/token"
+      }
       width = 3
     }
   }

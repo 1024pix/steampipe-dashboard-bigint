@@ -19,8 +19,8 @@ query "freshping_paused" {
     select
       'Freshping monitoring' as label,
       case
-        when count(*) = 0 then 'Paused'
-        else 'Not paused ('|| count(*) ||')'
+        when count(*) = 0 then 'En pause'
+        else 'Ca tourne ('|| count(*) ||')'
       end as value,
       case
         when count(*) = 0 then 'ok'
@@ -40,7 +40,7 @@ query "is_app_in_maintenance" {
       $1 as label,
       case
         when response_status_code = 503 then 'En maintenance'
-        else 'Running (HTTP ' || response_status_code || ')'
+        else 'En service (HTTP ' || response_status_code || ')'
       end as value,
       case
         when response_status_code = 503  then 'ok'
@@ -71,8 +71,8 @@ query "is_app_down" {
     select
       $1 as label,
       case
-        when count(*) = 0 then 'Down'
-        else 'Running (' || count(*)  ||')'
+        when count(*) = 0 then 'Hors service'
+        else 'En service (' || count(*)  ||')'
       end as value,
       case
         when count(*) = 0 then 'ok'

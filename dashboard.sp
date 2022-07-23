@@ -312,8 +312,19 @@ dashboard "dashboard_bigint" {
     }
     card {
       sql = <<-EOQ
+        with addon as (
+          select
+            id,
+            app_name
+          from
+            scalingo_addon
+          where
+            app_name=$1 and provider_name='PostgreSQL'
+          order by
+            id
+        )
         select
-          'Backup activé sur '|| $1 as label,
+          'Backup de '|| $1 as label,
           case
             when periodic_backups_enabled then 'Backup activé'
             else 'Backup désactivé'
@@ -323,13 +334,11 @@ dashboard "dashboard_bigint" {
             else 'alert'
           end as type
         from
-          scalingo_addon ad
+          addon ad
         inner join
           scalingo_database db
         on
           ad.id = db.addon_id and ad.app_name = db.app_name
-        where
-          ad.app_name=$1
       EOQ
       args = [var.scalingo_app_where_migration_will_be_launched]
       width = 3

@@ -160,7 +160,7 @@ query "database_cpu" {
     where
       query = 'service:pix-db-stats-production @event:leader-cpu @app:'|| $1
     order by
-      timestamp desc
+      timestamp
     limit 3600
   EOQ
 
@@ -181,7 +181,7 @@ query "database_io" {
     where
       query = 'service:pix-db-stats-production @event:db-diskio @app:'|| $1
     order by
-      timestamp desc
+      timestamp
     limit 3600
   EOQ
 

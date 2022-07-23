@@ -496,6 +496,8 @@ dashboard "dashboard_bigint" {
           last_timestamp lt
         join
           messages_not_alive ma on ma.host = lt.host
+        order by
+          lt.host
       EOQ
 
       args = [var.scalingo_app_where_migration_will_be_launched]
@@ -512,7 +514,9 @@ dashboard "dashboard_bigint" {
         from
           scalingo_container
         where
-          app_name=$1 and type='one-off';
+          app_name=$1 and type='one-off'
+        order by
+          label
       EOQ
 
       args = [var.scalingo_app_where_migration_will_be_launched]

@@ -510,7 +510,8 @@ dashboard "dashboard_bigint" {
         select
           label,
           state,
-          created_at
+          created_at,
+          'depuis ~' || date_part('hours', now() - created_at) || ' heures' as "Durée"
         from
           scalingo_container
         where

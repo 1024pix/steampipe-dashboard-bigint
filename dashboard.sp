@@ -482,10 +482,14 @@ dashboard "dashboard_bigint" {
           ma.message as current_step,
           ma.timestamp as current_step_started_at,
           case
-            when ma.message = 'Altering knowledge-elements.answerId type to BIGINT - In progress' then '1/4'
-            when ma.message = 'Altering flash-assessment-results.answerId type to BIGINT - In progress' then '2/4'
-            when ma.message = 'Altering answers.id type to BIGINT - In progress' then '3/4'
-            when ma.message = 'Altering answers_id_seq type to BIGINT - In progress' then '4/4'
+            when ma.message = 'Altering knowledge-elements.answerId type to BIGINT - In progress' then '0/4'
+            when ma.message = 'Altering knowledge-elements.answerId type to BIGINT - Done' then '1/4'
+            when ma.message = 'Altering flash-assessment-results.answerId type to BIGINT - In progress' then '1/4'
+            when ma.message = 'Altering flash-assessment-results.answerId type to BIGINT - Done' then '2/4'
+            when ma.message = 'Altering answers.id type to BIGINT - In progress' then '2/4'
+            when ma.message = 'Altering answers.id type to BIGINT - Done' then '3/4'
+            when ma.message = 'Altering answers_id_seq type to BIGINT - In progress' then '3/4'
+            when ma.message = 'Altering answers_id_seq type to BIGINT - Done' then '4/4'
             else 'unknown'
           end as progress
         from

@@ -3,7 +3,7 @@ mod "bigint" {
 
   require {
     plugin "francois2metz/scalingo" {
-      version = "0.5.0"
+      version = "0.7.1"
     }
     plugin "datadog" {
       version = "0.1.0"
@@ -12,7 +12,7 @@ mod "bigint" {
       version = "0.6.0"
     }
     plugin "ghcr.io/francois2metz/freshping" {
-      version = "0.0.1"
+      version = "0.0.2"
     }
   }
 }
